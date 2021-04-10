@@ -25,24 +25,24 @@ public class HU09 {
         try{
             casa.addDispositivoAHabitacion("hab1", "sensor");
         }catch(DispositivoConHabitacionExpception e){
-            System.out.println("El dispositivo ya tiene una habitación asignada.");
+            System.out.println("El dispositivo ya tiene una habitacion asignada.");
         }
         sensor = new SensorApertura("sensor2", "PuertaBalcon");
     }
 
     @Test
-    //Se intenta comprobar el estado de un dispositivo asignado a una habitación. Cada 10 segundos se debe actualizar el estado de cada dispositivo.
+    //Se intenta comprobar el estado de un dispositivo asignado a una habitacion. Cada 10 segundos se debe actualizar el estado de cada dispositivo.
     public void consultarEstadoDispositivoAsignado() {
-        //Given: Un dispositivo asignado a una habitación
+        //Given: Un dispositivo asignado a una habitacion
         //When: Se intenta comprobar su estado
         String estadoDispositivo = casa.getEstadoDispositivo("sensor");
-        //Then: Se muestra el estado del dispositivo y su habitación asignada
+        //Then: Se muestra el estado del dispositivo y su habitacion asignada
         assertEquals(estadoDispositivo,"CLOSE#hab1");
 
     }
 
     @Test
-    //Se intenta comprobar el estado de un dispositivo que no ha sido asignado a ninguna habitación.
+    //Se intenta comprobar el estado de un dispositivo que no ha sido asignado a ninguna habitacion.
     public void consultarEstadoDispositivoNoAsignado() {
         //Given: Un dispositivo no asignado
         //When: Se intenta comprobar su estado

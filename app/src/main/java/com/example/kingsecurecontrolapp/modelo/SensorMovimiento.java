@@ -5,7 +5,7 @@ public class SensorMovimiento extends Sensor {
     private EstadoSMovimiento estado;
 
     public SensorMovimiento(String codigo, String nombre) {
-        super(codigo, nombre);
+        super(codigo, nombre, "movimiento");
     }
 
     public EstadoSMovimiento getEstado() {

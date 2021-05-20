@@ -1,6 +1,8 @@
 package com.example.kingsecurecontrolapp.I1;
 
 import com.example.kingsecurecontrolapp.exceptions.DispositivoConHabitacionExpception;
+import com.example.kingsecurecontrolapp.exceptions.HabitacionNoExistenteException;
+import com.example.kingsecurecontrolapp.exceptions.HabitacionYaExistenteException;
 import com.example.kingsecurecontrolapp.modelo.Casa;
 import com.example.kingsecurecontrolapp.modelo.Habitacion;
 import com.example.kingsecurecontrolapp.modelo.SensorApertura;
@@ -17,14 +19,14 @@ public class HU09 {
     private SensorApertura sensor;
 
     @Before
-    public void inicializarCasa() {
+    public void inicializarCasa() throws HabitacionYaExistenteException {
         casa = new Casa("MiCasa");
         hab1 = new Habitacion("hab1", "cocina");
         casa.addHabitacion(hab1);
         sensor = new SensorApertura("sensor1", "VentanaCocina");
         try{
             casa.addDispositivoAHabitacion("hab1", "sensor");
-        }catch(DispositivoConHabitacionExpception e){
+        }catch(DispositivoConHabitacionExpception | HabitacionNoExistenteException e){
             System.out.println("El dispositivo ya tiene una habitacion asignada.");
         }
         sensor = new SensorApertura("sensor2", "PuertaBalcon");

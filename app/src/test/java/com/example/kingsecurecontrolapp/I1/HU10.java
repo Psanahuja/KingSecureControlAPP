@@ -1,6 +1,8 @@
 package com.example.kingsecurecontrolapp.I1;
 
 import com.example.kingsecurecontrolapp.exceptions.DispositivoConHabitacionExpception;
+import com.example.kingsecurecontrolapp.exceptions.HabitacionNoExistenteException;
+import com.example.kingsecurecontrolapp.exceptions.HabitacionYaExistenteException;
 import com.example.kingsecurecontrolapp.modelo.Casa;
 import com.example.kingsecurecontrolapp.modelo.Dispositivo;
 import com.example.kingsecurecontrolapp.modelo.Habitacion;
@@ -25,23 +27,29 @@ public class HU10 {
     private SensorApertura sensor5;
 
     @Before
-    public void inicializarCasa() {
+    public void inicializarCasa() throws HabitacionYaExistenteException {
         casa = new Casa("MiCasa");
         hab1 = new Habitacion("hab1", "cocina");
         hab2 = new Habitacion("hab2", "salon");
         casa.addHabitacion(hab1);
-        sensor1 = new SensorApertura("sensor1", "VentanaCocina");
-        sensor2 = new SensorApertura("sensor2", "VentanaCocina");
-        sensor3 = new SensorApertura("sensor3", "VentanaCocina");
-        sensor4 = new SensorApertura("sensor4", "VentanaCocina");
-        sensor5 = new SensorApertura("sensor5", "VentanaCocina");
+        sensor1 = new SensorApertura("sensor1", "VentanaCocina1");
+        sensor2 = new SensorApertura("sensor2", "VentanaCocina2");
+        sensor3 = new SensorApertura("sensor3", "VentanaCocina3");
+        sensor4 = new SensorApertura("sensor4", "VentanaCocina4");
+        sensor5 = new SensorApertura("sensor5", "VentanaCocina5");
+        casa.addDispositivoACasa(sensor1);
+        casa.addDispositivoACasa(sensor2);
+        casa.addDispositivoACasa(sensor3);
+        casa.addDispositivoACasa(sensor4);
+        casa.addDispositivoACasa(sensor5);
+
         try{
             casa.addDispositivoAHabitacion("hab1", "sensor1");
             casa.addDispositivoAHabitacion("hab1", "sensor2");
             casa.addDispositivoAHabitacion("hab1", "sensor3");
             casa.addDispositivoAHabitacion("hab1", "sensor4");
             casa.addDispositivoAHabitacion("hab1", "sensor5");
-        }catch(DispositivoConHabitacionExpception e){
+        }catch(DispositivoConHabitacionExpception | HabitacionNoExistenteException e){
             System.out.println("El dispositivo ya tiene una habitación asignada.");
         }
 

@@ -26,6 +26,8 @@ public class Casa {
         return habitaciones;
     }
 
+    public void setHabitaciones(ArrayList<Habitacion> habitaciones){this.habitaciones=habitaciones;}
+
     public void addHabitacion(Habitacion habitacion){
         this.habitaciones.add(habitacion);
     }

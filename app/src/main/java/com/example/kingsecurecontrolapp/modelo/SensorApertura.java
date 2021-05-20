@@ -5,7 +5,7 @@ public class SensorApertura extends Sensor{
     private EstadoSApertura estado;
 
     public SensorApertura(String codigo, String nombre) {
-        super(codigo, nombre);
+        super(codigo, nombre, "Apertura");
 
     }
 

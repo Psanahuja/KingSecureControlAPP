@@ -37,6 +37,10 @@ public class Habitacion {
         return sensores;
     }
 
+    public void setSensores(ArrayList<Sensor> sensores) {
+        this.sensores = sensores;
+    }
+
     public void addSensor(Sensor sensor) {
         this.sensores.add(sensor);
     }
@@ -53,6 +57,8 @@ public class Habitacion {
     public ArrayList<Actuador> getActuadores() {
         return actuadores;
     }
+
+    public void setActuadores(ArrayList<Actuador> actuadores){this.actuadores = actuadores;}
 
     public void addActuador(Actuador actuador) {
         this.actuadores.add(actuador);

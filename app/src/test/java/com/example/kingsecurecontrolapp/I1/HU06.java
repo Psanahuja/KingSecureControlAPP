@@ -41,12 +41,13 @@ public class HU06 {
     public void anyadirDispositivoNoAsignado() throws DispositivoConHabitacionExpception, HabitacionNoExistenteException {
         //Given: Un dispositivo que no tiene una habitación asignada
         //When: Se le asigna una habitación
+        Habitacion sinAsignar = casa.getSinAsignar();
+        sinAsignar.addSensor(sensor);
         casa.addDispositivoAHabitacion("hab1", "sensor1");
-
         //Then: El dispositivo forma parte de esa habitación y cambia su estado a activo
         boolean esta = false;
         for(Sensor s : casa.getSensoresHabitacion("hab1")){
-            if(s.getNombre().equals("sensor1")){
+            if(s.getCodigo().equals("sensor1")){
                 esta = true;
                 break;
             }
@@ -69,10 +70,13 @@ public class HU06 {
     public void anyadirDispositivoAsignado() throws DispositivoConHabitacionExpception, HabitacionNoExistenteException {
         //Given: Un dispositivo con una habitación ya asignada
         try {
+            Habitacion sinAsignar = casa.getSinAsignar();
+            sinAsignar.addSensor(sensor);
+            hab1.addSensor(sensor);
             casa.addDispositivoAHabitacion("hab1", "sensor1");
+            fail();
         }catch (DispositivoConHabitacionExpception | HabitacionNoExistenteException e){
 
-            fail();
         }
         //When: Se asigna la misma habitación que la que tiene asignada el dispositivo
         casa.addDispositivoAHabitacion("hab1", "sensor1");

@@ -2,18 +2,25 @@ package com.example.kingsecurecontrolapp.modelo;
 
 import com.example.kingsecurecontrolapp.exceptions.DispositivoConHabitacionExpception;
 import com.example.kingsecurecontrolapp.exceptions.DispositivoNoAsignadoException;
+import com.example.kingsecurecontrolapp.exceptions.HabitacionNoExistenteException;
+import com.example.kingsecurecontrolapp.exceptions.HabitacionYaExistenteException;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class Casa {
     private String nombreCasa;
     private ArrayList<Habitacion> habitaciones;
+    private final Habitacion sinAsignar;
 
     public Casa(String nombreCasa){
         this.nombreCasa = nombreCasa;
         this.habitaciones = new ArrayList<>();
+        this.sinAsignar = new Habitacion("sin_asignar","Sin asignar");
     }
-
+    public void pullData(){
+        return;
+    }
     public String getNombreCasa() {
         return nombreCasa;
     }
@@ -26,18 +33,67 @@ public class Casa {
         return habitaciones;
     }
 
-    public void setHabitaciones(ArrayList<Habitacion> habitaciones){this.habitaciones=habitaciones;}
-
-    public void addHabitacion(Habitacion habitacion){
+    public void addHabitacion(Habitacion habitacion) throws HabitacionYaExistenteException {
         this.habitaciones.add(habitacion);
     }
 
-    public void addDispositivoAHabitacion(String codHabitacion, String codDispositivo) throws DispositivoConHabitacionExpception {
+    public void removeHabitacion(String codHabitacion) throws HabitacionNoExistenteException {
+        return;
+    }
+
+    public void cambiarNombreHabitacion(String codHab, String nuevoNombre) throws HabitacionYaExistenteException{
+        return;
+    }
+
+    public void addDispositivoAHabitacion(String codHabitacion, String codDispositivo) throws DispositivoConHabitacionExpception, HabitacionNoExistenteException {
+        ArrayList<Sensor> sensoresDisp = sinAsignar.getSensores();
+        boolean aBorrar = false;
+        if (!sensoresDisp.isEmpty()){
+            for (Sensor sensor : sensoresDisp){
+                if (sensor.getCodigo().equals(codDispositivo)){
+                    for (Habitacion habitacion : habitaciones){
+                        if (habitacion.getCodigo().equals(codHabitacion)){
+                            if (habitacion.getSensores().contains(sensor)){
+                                throw new DispositivoConHabitacionExpception();
+                            }
+                            habitacion.addSensor(sensor);
+                            aBorrar = true;
+                            if (sensor.getTipoSensor().equals("Apertura")){
+                                SensorApertura sA = (SensorApertura) sensor;
+                                sA.setEstado(EstadoSApertura.CLOSE);
+                            }
+                            else{
+                                SensorMovimiento sM = (SensorMovimiento) sensor;
+                                sM.setEstado(EstadoSMovimiento.NO_MOTION);
+                            }
+                            break;
+                        }
+                    }
+                }
+            }
+            if (aBorrar){
+                sinAsignar.removeSensor(codDispositivo);
+            }
+            else{
+                throw new HabitacionNoExistenteException();
+            }
+        }
+    }
+
+    public void cambiarDispositivoDeHabitacion(String codHabitacion1, String codHabitacion2, String codDispositivo) throws HabitacionNoExistenteException {
         return;
     }
 
     public void removeDispositivoDeHabitacion(String codHabitacion, String codDispositivo) throws DispositivoNoAsignadoException {
         return;
+    }
+
+    public void addDispositivoACasa(Dispositivo dispositivo){
+        return;
+    }
+
+    public Habitacion getSinAsignar() {
+        return sinAsignar;
     }
 
     //Devuelve un string con estado#codHabitacion
@@ -46,6 +102,21 @@ public class Casa {
     }
 
     public ArrayList<Dispositivo> getDispositivosHabitacion(String codHabitacion){
+        return null;
+    }
+
+    public ArrayList<Sensor> getSensoresHabitacion(String codHabitacion){
+        if (!habitaciones.isEmpty()){
+            for (Habitacion hab : habitaciones){
+                if (hab.getCodigo().equals(codHabitacion)){
+                    return hab.getSensores();
+                }
+            }
+        }
+        return null;
+    }
+
+    public ArrayList<Actuador> getActuadoresHabitacion(String codHabitacion){
         return null;
     }
 

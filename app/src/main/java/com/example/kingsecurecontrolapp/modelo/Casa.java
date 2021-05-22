@@ -34,19 +34,46 @@ public class Casa {
     }
 
     public void addHabitacion(Habitacion habitacion) throws HabitacionYaExistenteException {
+        for (Habitacion hab: habitaciones){
+            if (hab.getCodigo().equals(habitacion.getCodigo())) {
+
+                throw new HabitacionYaExistenteException();
+            }
+        }
         this.habitaciones.add(habitacion);
     }
 
     public void removeHabitacion(String codHabitacion) throws HabitacionNoExistenteException {
-        return;
+        boolean esta = false;
+        for (Habitacion hab : habitaciones){
+            if (hab.getCodigo().equals(codHabitacion)){
+                esta = true;
+                habitaciones.remove(hab);
+                break;
+            }
+        }
+        if (!esta){
+            throw new HabitacionNoExistenteException();
+        }
     }
 
     public void cambiarNombreHabitacion(String codHab, String nuevoNombre) throws HabitacionYaExistenteException{
-        return;
+        for (Habitacion hab : habitaciones){
+            if (hab.getCodigo().equals(codHab)){
+                for (Habitacion habitacion : habitaciones){
+                    if (habitacion.getNombre().equals(nuevoNombre)){
+                        throw new HabitacionYaExistenteException();
+                    }
+                }
+                hab.setNombre(nuevoNombre);
+            }
+        }
     }
 
     public void addDispositivoAHabitacion(String codHabitacion, String codDispositivo) throws DispositivoConHabitacionExpception, HabitacionNoExistenteException {
         ArrayList<Sensor> sensoresDisp = sinAsignar.getSensores();
+        ArrayList<Actuador> actuadors = sinAsignar.getActuadores();
+
         boolean aBorrar = false;
         if (!sensoresDisp.isEmpty()){
             for (Sensor sensor : sensoresDisp){
@@ -74,22 +101,108 @@ public class Casa {
             if (aBorrar){
                 sinAsignar.removeSensor(codDispositivo);
             }
-            else{
+        }
+        if (!aBorrar){
+
+            for (Actuador actuador : actuadors){
+                if (actuador.getCodigo().equals(codDispositivo)){
+                    for (Habitacion habitacion : habitaciones){
+                        if (habitacion.getCodigo().equals(codHabitacion)){
+                            if (habitacion.getActuadores().contains(actuador)){
+                                throw new DispositivoConHabitacionExpception();
+                            }
+                            habitacion.addActuador(actuador);
+                            aBorrar = true;
+                            actuador.setEstado(EstadoActuador.OFF);
+                        }
+                    }
+                }
+            }
+            if (aBorrar){
+                sinAsignar.removeActuador(codDispositivo);
+            }
+            else {
                 throw new HabitacionNoExistenteException();
             }
         }
     }
 
     public void cambiarDispositivoDeHabitacion(String codHabitacion1, String codHabitacion2, String codDispositivo) throws HabitacionNoExistenteException {
-        return;
+        Habitacion hab1 = null;
+        Habitacion hab2 = null;
+        for(Habitacion habitacion : habitaciones){
+            if (habitacion.getCodigo().equals(codHabitacion1)){
+                hab1 = habitacion;
+            }
+            if (habitacion.getCodigo().equals(codHabitacion2)){
+                hab2 = habitacion;
+            }
+        }
+        if(hab1 == null || hab2 == null){
+            throw new HabitacionNoExistenteException();
+        }
+        boolean necesarioOtroFor = true;
+        for (Sensor sensor : hab1.getSensores()){
+            if (sensor.getCodigo().equals(codDispositivo)){
+                hab2.addSensor(sensor);
+                hab1.removeSensor(codDispositivo);
+                necesarioOtroFor = false;
+                break;
+            }
+        }
+        if (necesarioOtroFor){
+
+            for (Actuador actuador : hab1.getActuadores()){
+                if (actuador.getCodigo().equals(codDispositivo)) {
+                    hab2.addActuador(actuador);
+                    hab1.removeActuador(codDispositivo);
+                    break;
+                }
+            }
+        }
     }
 
     public void removeDispositivoDeHabitacion(String codHabitacion, String codDispositivo) throws DispositivoNoAsignadoException {
-        return;
+        Habitacion habitacion = null;
+        boolean aBorrar = false;
+        for (Habitacion hab : habitaciones){
+            if (hab.getCodigo().equals(codHabitacion)){
+                habitacion = hab;
+                break;
+            }
+        }
+        for (Sensor sensor : habitacion.getSensores()){
+            if (sensor.getCodigo().equals(codDispositivo)){
+                sinAsignar.addSensor(sensor);
+                aBorrar=true;
+            }
+        }
+        if (aBorrar){
+            habitacion.removeSensor(codDispositivo);
+        }
+        else{
+            for (Actuador actuador : habitacion.getActuadores()){
+                if (actuador.getCodigo().equals(codDispositivo)){
+                    sinAsignar.addActuador(actuador);
+                    aBorrar=true;
+                }
+            }
+        }
+        if (aBorrar){
+            sinAsignar.removeActuador(codDispositivo);
+        }
+        else {
+            throw new DispositivoNoAsignadoException();
+        }
     }
 
     public void addDispositivoACasa(Dispositivo dispositivo){
-        return;
+        if (dispositivo.getClass().equals(Actuador.class)){
+            sinAsignar.addActuador((Actuador) dispositivo);
+        }
+        else {
+            sinAsignar.addSensor((Sensor) dispositivo);
+        }
     }
 
     public Habitacion getSinAsignar() {

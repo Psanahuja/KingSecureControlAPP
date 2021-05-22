@@ -12,6 +12,7 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 //Como usuario quiero borrar una habitación del sistema.
 public class HU03 {
@@ -47,6 +48,7 @@ public class HU03 {
         //Given: Un conjunto de habitaciones ya existentes
         //When: Se intenta borrar una habitación que no existe
         casa.removeHabitacion("hab2");
+        fail();
         //Then: Se muestra el mensaje “No existe una habitación con ese nombre, por favor, inténtelo con otro nombre.”
     }
 }

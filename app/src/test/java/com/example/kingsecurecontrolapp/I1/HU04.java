@@ -13,6 +13,7 @@ import org.junit.Test;
 import java.io.PushbackInputStream;
 
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 
 //Como usuario quiero cambiar el nombre de una habitación existente del sistema.
@@ -55,6 +56,7 @@ public class HU04 {
         //Given: Un conjunto de habitaciones ya existentes
         //When: Se intenta cambiar el nombre de la habitación a uno de los que ya existen
         casa.cambiarNombreHabitacion("hab1", "comedor");
+        fail();
         //Then: Se muestra el mensaje “Ya existe una habitación con ese nombre, por favor, indique uno nuevo.”
     }
 }

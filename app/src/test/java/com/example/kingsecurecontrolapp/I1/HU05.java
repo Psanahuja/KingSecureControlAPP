@@ -38,11 +38,13 @@ public class HU05 {
     public void anyadirDispAHabCorrecta() throws HabitacionNoExistenteException {
         //Given: Un conjunto de habitaciones ya existentes y un dispositivo asignado a una habitación
         //When: Se intenta cambiar la habitación asignada al dispositivo a una existente
-        casa.cambiarDispositivoDeHabitacion("hab1", "hab2", "sensor");
+        casa.cambiarDispositivoDeHabitacion("hab1", "hab2", "sensor1");
+
+
         //Then: Se cambia la habitación asignada al dispositivo
         boolean esta = false;
         for(Sensor s : casa.getSensoresHabitacion("hab2")){
-            if(s.getNombre().equals("sensor1")){
+            if(s.getCodigo().equals("sensor1")){
                 esta = true;
                 break;
             }

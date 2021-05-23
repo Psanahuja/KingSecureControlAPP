@@ -42,6 +42,17 @@ public class Habitacion {
     }
 
     public void addSensor(Sensor sensor) {
+
+        if (this.codigo.equals("sin_asignar")){
+            if (sensor.getTipoSensor().equals("Apertura")){
+                SensorApertura sensorApertura = (SensorApertura) sensor;
+                sensorApertura.setEstado(EstadoSApertura.DISCONNECTED);
+            }
+            else {
+                SensorMovimiento sensorMovimiento = (SensorMovimiento) sensor;
+                sensorMovimiento.setEstado(EstadoSMovimiento.DISCONNECTED);
+            }
+        }
         this.sensores.add(sensor);
     }
 
@@ -61,6 +72,9 @@ public class Habitacion {
     public void setActuadores(ArrayList<Actuador> actuadores){this.actuadores = actuadores;}
 
     public void addActuador(Actuador actuador) {
+        if (this.codigo.equals("sin_asignar")){
+            actuador.setEstado(EstadoActuador.DISCONNECTED);
+        }
         this.actuadores.add(actuador);
     }
 

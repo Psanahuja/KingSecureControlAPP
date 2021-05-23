@@ -210,8 +210,66 @@ public class Casa {
     }
 
     //Devuelve un string con estado#codHabitacion
-    public String getEstadoDispositivo(String codDispositivo){
-        return "unimplemented";
+    public String getEstadoDispositivo(String codDispositivo, String codHabitacion){
+        String estado = "";
+        boolean encontrado = false;
+        if (codHabitacion.equals("sin_asignar")){
+            for (Actuador actuador : sinAsignar.getActuadores()){
+                if (actuador.getCodigo().equals(codDispositivo)){
+                    estado = actuador.getEstado().toString() + "#" +codHabitacion;
+                    encontrado = true;
+                    break;
+                }
+            }
+            if (!encontrado){
+                for (Sensor sensor : sinAsignar.getSensores()){
+                    if (sensor.getCodigo().equals(codDispositivo)){
+                        encontrado = true;
+                        if (sensor.getTipoSensor().equals("Apertura")){
+                            SensorApertura sA = (SensorApertura) sensor;
+                            estado = sA.getEstado().toString() + "#" + codHabitacion;
+                        }
+                        else {
+                            SensorMovimiento sM = (SensorMovimiento) sensor;
+                            estado = sM.getEstado().toString() + "#" + codHabitacion;
+                        }
+                        break;
+                    }
+                }
+            }
+        }
+        else{
+            for (Habitacion habitacion : habitaciones){
+                if (habitacion.getCodigo().equals(codHabitacion)){
+                    for (Actuador actuador : habitacion.getActuadores()){
+                        if (actuador.getCodigo().equals(codDispositivo)){
+                            encontrado = true;
+                            estado = actuador.getEstado() + "#" + codHabitacion;
+                            break;
+                        }
+                    }
+                    if (!encontrado){
+                        for (Sensor sensor : habitacion.getSensores()){
+                            if (sensor.getCodigo().equals(codDispositivo)){
+                                encontrado = true;
+                                if (sensor.getTipoSensor().equals("Apertura")){
+                                    SensorApertura sensorApertura = (SensorApertura) sensor;
+                                    estado = sensorApertura.getEstado().toString() + "#" + codHabitacion;
+                                }
+                                else {
+                                    SensorMovimiento sensorMovimiento = (SensorMovimiento) sensor;
+                                    estado = sensorMovimiento.getEstado().toString() + "#" + codHabitacion;
+                                }
+                                break;
+                            }
+                        }
+                    }
+                    break;
+                }
+            }
+        }
+
+        return estado;
     }
 
     public ArrayList<Dispositivo> getDispositivosHabitacion(String codHabitacion){

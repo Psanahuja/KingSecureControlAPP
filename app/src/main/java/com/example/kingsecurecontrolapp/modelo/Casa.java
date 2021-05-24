@@ -162,7 +162,7 @@ public class Casa {
         }
     }
 
-    public void removeDispositivoDeHabitacion(String codHabitacion, String codDispositivo) throws DispositivoNoAsignadoException {
+    public void removeDispositivoDeHabitacion(String codHabitacion, String codDispositivo) throws DispositivoNoAsignadoException, HabitacionNoExistenteException {
         Habitacion habitacion = null;
         boolean aBorrar = false;
         for (Habitacion hab : habitaciones){
@@ -171,8 +171,17 @@ public class Casa {
                 break;
             }
         }
+        if (habitacion==null) throw new HabitacionNoExistenteException();
         for (Sensor sensor : habitacion.getSensores()){
             if (sensor.getCodigo().equals(codDispositivo)){
+                if (sensor.getTipoSensor().equals("Apertura")){
+                    SensorApertura sA = (SensorApertura) sensor;
+                    sA.setEstado(EstadoSApertura.DISCONNECTED);
+                }
+                else {
+                    SensorMovimiento sM = (SensorMovimiento) sensor;
+                    sM.setEstado(EstadoSMovimiento.DISCONNECTED);
+                }
                 sinAsignar.addSensor(sensor);
                 aBorrar=true;
             }
@@ -183,6 +192,7 @@ public class Casa {
         else{
             for (Actuador actuador : habitacion.getActuadores()){
                 if (actuador.getCodigo().equals(codDispositivo)){
+                    actuador.setEstado(EstadoActuador.DISCONNECTED);
                     sinAsignar.addActuador(actuador);
                     aBorrar=true;
                 }

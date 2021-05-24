@@ -14,6 +14,7 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
@@ -53,8 +54,8 @@ public class HU14{
         ArrayList<Sensor> sensores = habNoAsig.getSensores();
         ArrayList<Actuador> actuadores = habNoAsig.getActuadores();
         //Then: Se devolverá una lista con un elemento
-        assertTrue(actuadores.size()==0);
-        assertTrue(sensores.size()==0);
+        assertEquals(0,actuadores.size());
+        assertEquals(1,sensores.size());
 
 
     }

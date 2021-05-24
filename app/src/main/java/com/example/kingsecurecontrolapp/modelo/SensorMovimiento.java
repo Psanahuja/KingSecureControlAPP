@@ -6,6 +6,7 @@ public class SensorMovimiento extends Sensor {
 
     public SensorMovimiento(String codigo, String nombre) {
         super(codigo, nombre, "Movimiento");
+        this.estado = EstadoSMovimiento.DISCONNECTED;
     }
 
     public EstadoSMovimiento getEstado() {

@@ -48,7 +48,7 @@ public class HU11{
 
     @Test
     //Se intenta consultar el estado de los dispositivos de una habitación sin dispositivos asignados.
-    public void getEstadosHabEmpty() {
+    public void getEstadosHabEmpty() throws HabitacionNoExistenteException {
         //Given: Un habitación sin dispositivos asignados
         //When: Se intenta comprobar el estado de los dispositivos asignados
         ArrayList<Sensor> sensores = casa.getSensoresHabitacion("hab1");

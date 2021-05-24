@@ -272,11 +272,7 @@ public class Casa {
         return estado;
     }
 
-    public ArrayList<Dispositivo> getDispositivosHabitacion(String codHabitacion){
-        return null;
-    }
-
-    public ArrayList<Sensor> getSensoresHabitacion(String codHabitacion){
+    public ArrayList<Sensor> getSensoresHabitacion(String codHabitacion) throws HabitacionNoExistenteException {
         if (!habitaciones.isEmpty()){
             for (Habitacion hab : habitaciones){
                 if (hab.getCodigo().equals(codHabitacion)){
@@ -284,11 +280,19 @@ public class Casa {
                 }
             }
         }
-        return null;
+        throw new HabitacionNoExistenteException();
     }
 
-    public ArrayList<Actuador> getActuadoresHabitacion(String codHabitacion){
-        return null;
+    public ArrayList<Actuador> getActuadoresHabitacion(String codHabitacion) throws HabitacionNoExistenteException {
+
+        if (!habitaciones.isEmpty()){
+            for (Habitacion hab : habitaciones){
+                if (hab.getCodigo().equals(codHabitacion)){
+                    return hab.getActuadores();
+                }
+            }
+        }
+        throw new HabitacionNoExistenteException();
     }
 
 

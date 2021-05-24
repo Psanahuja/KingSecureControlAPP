@@ -3,6 +3,7 @@ package com.example.kingsecurecontrolapp.I1;
 import com.example.kingsecurecontrolapp.exceptions.DispositivoConHabitacionExpception;
 import com.example.kingsecurecontrolapp.exceptions.HabitacionNoExistenteException;
 import com.example.kingsecurecontrolapp.exceptions.HabitacionYaExistenteException;
+import com.example.kingsecurecontrolapp.modelo.Actuador;
 import com.example.kingsecurecontrolapp.modelo.Casa;
 import com.example.kingsecurecontrolapp.modelo.Dispositivo;
 import com.example.kingsecurecontrolapp.modelo.Habitacion;
@@ -25,6 +26,7 @@ public class HU10 {
     private SensorApertura sensor3;
     private SensorApertura sensor4;
     private SensorApertura sensor5;
+    private Actuador act1;
 
     @Before
     public void inicializarCasa() throws HabitacionYaExistenteException {
@@ -32,16 +34,20 @@ public class HU10 {
         hab1 = new Habitacion("hab1", "cocina");
         hab2 = new Habitacion("hab2", "salon");
         casa.addHabitacion(hab1);
+        casa.addHabitacion(hab2);
         sensor1 = new SensorApertura("sensor1", "VentanaCocina1");
         sensor2 = new SensorApertura("sensor2", "VentanaCocina2");
         sensor3 = new SensorApertura("sensor3", "VentanaCocina3");
         sensor4 = new SensorApertura("sensor4", "VentanaCocina4");
         sensor5 = new SensorApertura("sensor5", "VentanaCocina5");
+        act1 = new Actuador("alarma1", "Alarma cocina");
+
         casa.addDispositivoACasa(sensor1);
         casa.addDispositivoACasa(sensor2);
         casa.addDispositivoACasa(sensor3);
         casa.addDispositivoACasa(sensor4);
         casa.addDispositivoACasa(sensor5);
+        casa.addDispositivoACasa(act1);
 
         try{
             casa.addDispositivoAHabitacion("hab1", "sensor1");
@@ -49,6 +55,7 @@ public class HU10 {
             casa.addDispositivoAHabitacion("hab1", "sensor3");
             casa.addDispositivoAHabitacion("hab1", "sensor4");
             casa.addDispositivoAHabitacion("hab1", "sensor5");
+            casa.addDispositivoAHabitacion("hab1", "alarma1");
         }catch(DispositivoConHabitacionExpception | HabitacionNoExistenteException e){
             System.out.println("El dispositivo ya tiene una habitación asignada.");
         }
@@ -57,27 +64,31 @@ public class HU10 {
 
     @Test
     //Se intenta consultar la lista de dispositivos asignados a una habitación con dispositivos asignados.
-    public void consultarHabitacionConDispositivos() {
+    public void consultarHabitacionConDispositivos() throws HabitacionNoExistenteException {
         //Given: Una habitación con dispositivos asignados
         //When: Se intenta consultar la lista de dispositivos asignados
-        ArrayList<Dispositivo> dispositivosHabitacion = casa.getDispositivosHabitacion("hab1");
+        ArrayList<Dispositivo> dispositivosHabitacion = new ArrayList<>();
+        dispositivosHabitacion.addAll(casa.getActuadoresHabitacion("hab1"));
+        dispositivosHabitacion.addAll(casa.getSensoresHabitacion("hab1"));
         //Then: Se muestra un listado de los dispositivos asignados en esa habitación
-        assertTrue(dispositivosHabitacion.size()==5);
+        assertEquals(6, dispositivosHabitacion.size());
         assertTrue(dispositivosHabitacion.contains(sensor1));
         assertTrue(dispositivosHabitacion.contains(sensor2));
         assertTrue(dispositivosHabitacion.contains(sensor3));
         assertTrue(dispositivosHabitacion.contains(sensor4));
         assertTrue(dispositivosHabitacion.contains(sensor5));
+        assertTrue(dispositivosHabitacion.contains(sensor5));
     }
 
-
+    @Test
     //Se intenta consultar la lista de dispositivos asignados a una habitación sin dispositivos asignados
-    public void consultarHabitacionSinDispositivos() {
+    public void consultarHabitacionSinDispositivos() throws HabitacionNoExistenteException {
         //Given: Una habitación sin dispositivos asignados
         //When: Se intenta consultar la lista de dispositivos asignados
-        ArrayList<Dispositivo> dispositivosHabitacion = casa.getDispositivosHabitacion("hab2");
+        ArrayList<Actuador> actuadores =casa.getActuadoresHabitacion("hab2");
+        assertEquals(0,casa.getActuadoresHabitacion("hab2").size());
+        assertEquals(0,casa.getSensoresHabitacion("hab2").size());
         //Then: Se muestra el mensaje "La habitación seleccionada no tiene ningún dispositivo asignado"
-        assertTrue(dispositivosHabitacion.size()==0);
 
     }
 }

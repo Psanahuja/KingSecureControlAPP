@@ -44,7 +44,7 @@ public class HU07 {
 
     @Test
     //El usuario intenta borrar de un dispositivo la habitación que tiene asignada.
-    public void borrarDispositivoAsignado() throws  DispositivoNoAsignadoException{
+    public void borrarDispositivoAsignado() throws DispositivoNoAsignadoException, HabitacionNoExistenteException {
         //Given: Un dispositivo que se desea eliminar de una habitación a la cual está asignado
         //When: Se intenta eliminar su asignación
         casa.removeDispositivoDeHabitacion("hab1", "sensor1");

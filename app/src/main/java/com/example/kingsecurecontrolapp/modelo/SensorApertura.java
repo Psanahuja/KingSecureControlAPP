@@ -6,6 +6,7 @@ public class SensorApertura extends Sensor{
 
     public SensorApertura(String codigo, String nombre) {
         super(codigo, nombre, "Apertura");
+        this.estado = EstadoSApertura.DISCONNECTED;
 
     }
 

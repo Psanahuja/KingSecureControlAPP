@@ -6,6 +6,7 @@ public class Actuador extends Dispositivo {
 
     public Actuador(String codigo, String nombre) {
         super(codigo, nombre);
+        this.estado = EstadoActuador.DISCONNECTED;
     }
 
     public EstadoActuador getEstado() {

@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
                     addHabitacion();
                 });
         recyclerView = findViewById(R.id.HabitacionesRecyclerView);
-        habitacionAdapter = new HabitacionAdapter(casa.getHabitaciones());
+        habitacionAdapter = new HabitacionAdapter(casa, this);
         recyclerView.setAdapter(habitacionAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }

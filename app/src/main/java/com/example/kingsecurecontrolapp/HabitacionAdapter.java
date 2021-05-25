@@ -1,20 +1,29 @@
 package com.example.kingsecurecontrolapp;
 
+import android.content.Context;
+import android.content.DialogInterface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.kingsecurecontrolapp.exceptions.HabitacionNoExistenteException;
+import com.example.kingsecurecontrolapp.modelo.Casa;
 import com.example.kingsecurecontrolapp.modelo.Habitacion;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import java.util.ArrayList;
 
 public class HabitacionAdapter extends RecyclerView.Adapter<HabitacionAdapter.ViewHolder> {
 
     private ArrayList<Habitacion> localDataSet;
+    private Casa casa;
+    private Context context;
 
     /**
      * Provide a reference to the type of views that you are using
@@ -44,11 +53,13 @@ public class HabitacionAdapter extends RecyclerView.Adapter<HabitacionAdapter.Vi
     /**
      * Initialize the dataset of the Adapter.
      *
-     * @param dataSet String[] containing the data to populate views to be used
+     *
      * by RecyclerView.
      */
-    public HabitacionAdapter(ArrayList<Habitacion> dataSet) {
-        localDataSet = dataSet;
+    public HabitacionAdapter(Casa casa, Context context) {
+        this.casa = casa;
+        localDataSet = casa.getHabitaciones();
+        this.context = context;
     }
 
     // Create new views (invoked by the layout manager)
@@ -67,10 +78,45 @@ public class HabitacionAdapter extends RecyclerView.Adapter<HabitacionAdapter.Vi
 
         // Get element from your dataset at this position and replace the
         // contents of the view with that element
+
         viewHolder.textView.setText(localDataSet.get(position).getNombre());
+        viewHolder.imgdelete.setOnClickListener(v -> {
+            try {
+                deleteHabitacion(localDataSet.get(position).getCodigo(), position);
+            } catch (HabitacionNoExistenteException e) {
+
+            }
+
+        });
     }
     public void addHabitacion(Habitacion habitacion){
         notifyItemInserted(localDataSet.size() - 1);
+    }
+    public void deleteHabitacion(String codHab, final int position) throws HabitacionNoExistenteException {
+        MaterialAlertDialogBuilder mADB = new MaterialAlertDialogBuilder(context);
+        mADB.setTitle("¿Desea eliminar la habitación?");
+        MaterialAlertDialogBuilder habInex = new MaterialAlertDialogBuilder(context);
+        mADB.setPositiveButton("Confirmar", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                try {
+                    casa.removeHabitacion(codHab);
+                    notifyItemRemoved(position);
+                } catch (HabitacionNoExistenteException e) {
+                    habInex.setTitle("Esta habitacion no existe");
+                    habInex.show();
+                }
+            }
+        });
+        mADB.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+        mADB.show();
+
+
     }
     // Return the size of your dataset (invoked by the layout manager)
     @Override

@@ -35,7 +35,7 @@ public class Casa {
 
     public void addHabitacion(Habitacion habitacion) throws HabitacionYaExistenteException {
         for (Habitacion hab: habitaciones){
-            if (hab.getCodigo().equals(habitacion.getCodigo())) {
+            if (hab.getCodigo().equals(habitacion.getCodigo()) || hab.getNombre().equals(habitacion.getNombre())) {
 
                 throw new HabitacionYaExistenteException();
             }

@@ -13,6 +13,7 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.kingsecurecontrolapp.exceptions.HabitacionNoExistenteException;
+import com.example.kingsecurecontrolapp.exceptions.HabitacionYaExistenteException;
 import com.example.kingsecurecontrolapp.modelo.Casa;
 import com.example.kingsecurecontrolapp.modelo.Habitacion;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -74,25 +75,29 @@ public class HabitacionAdapter extends RecyclerView.Adapter<HabitacionAdapter.Vi
 
     // Replace the contents of a view (invoked by the layout manager)
     @Override
-    public void onBindViewHolder(ViewHolder viewHolder, final int position) {
+    public void onBindViewHolder(ViewHolder viewHolder, int position) {
 
         // Get element from your dataset at this position and replace the
         // contents of the view with that element
-
         viewHolder.textView.setText(localDataSet.get(position).getNombre());
         viewHolder.imgdelete.setOnClickListener(v -> {
             try {
-                deleteHabitacion(localDataSet.get(position).getCodigo(), position);
+                int pos = getPos(viewHolder.textView.getText().toString());
+                deleteHabitacion(localDataSet.get(pos).getCodigo(), pos);
             } catch (HabitacionNoExistenteException e) {
 
             }
 
         });
+        viewHolder.imgedit.setOnClickListener(v -> {
+            int pos = getPos(viewHolder.textView.getText().toString());
+            editHabitacion(localDataSet.get(pos).getCodigo(), pos);
+        });
     }
     public void addHabitacion(Habitacion habitacion){
         notifyItemInserted(localDataSet.size() - 1);
     }
-    public void deleteHabitacion(String codHab, final int position) throws HabitacionNoExistenteException {
+    public void deleteHabitacion(String codHab, int position) throws HabitacionNoExistenteException {
         MaterialAlertDialogBuilder mADB = new MaterialAlertDialogBuilder(context);
         mADB.setTitle("¿Desea eliminar la habitación?");
         MaterialAlertDialogBuilder habInex = new MaterialAlertDialogBuilder(context);
@@ -117,6 +122,45 @@ public class HabitacionAdapter extends RecyclerView.Adapter<HabitacionAdapter.Vi
         mADB.show();
 
 
+    }
+    public void editHabitacion(String codHab, int position){
+        MaterialAlertDialogBuilder mADB = new MaterialAlertDialogBuilder(context);
+        mADB.setTitle("Cambia el nombre de la habitación");
+        EditText inputNombre = new EditText(context);
+        inputNombre.setText("Nombre");
+        LinearLayout linearLayout = new LinearLayout(context);
+        linearLayout.addView(inputNombre);
+        linearLayout.setOrientation(LinearLayout.VERTICAL);
+        mADB.setView(linearLayout);
+        MaterialAlertDialogBuilder habYaExiste = new MaterialAlertDialogBuilder(context);
+        mADB.setPositiveButton("Cambiar", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                String newNombre = inputNombre.getText().toString().trim();
+                try {
+                    casa.cambiarNombreHabitacion(codHab, newNombre);
+                    notifyItemChanged(position);
+                } catch (HabitacionYaExistenteException e) {
+                    habYaExiste.setTitle("Ese nombre ya existe");
+                    habYaExiste.show();
+                }
+            }
+        });
+        mADB.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+        mADB.show();
+    }
+    private int getPos(String codHab){
+        for (Habitacion hab : localDataSet){
+            if (hab.getNombre().equals(codHab)){
+                return localDataSet.indexOf(hab);
+            }
+        }
+        return localDataSet.size();
     }
     // Return the size of your dataset (invoked by the layout manager)
     @Override

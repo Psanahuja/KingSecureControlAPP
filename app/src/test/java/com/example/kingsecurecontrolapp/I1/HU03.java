@@ -1,6 +1,7 @@
 package com.example.kingsecurecontrolapp.I1;
 
 import com.example.kingsecurecontrolapp.exceptions.DispositivoConHabitacionExpception;
+import com.example.kingsecurecontrolapp.exceptions.HabitacionConDispositivosException;
 import com.example.kingsecurecontrolapp.exceptions.HabitacionNoExistenteException;
 import com.example.kingsecurecontrolapp.exceptions.HabitacionYaExistenteException;
 import com.example.kingsecurecontrolapp.modelo.Casa;
@@ -26,7 +27,7 @@ public class HU03 {
 
     @Test
     //El usuario intenta borrar una habitación que existe en el sistema.
-    public void anyadirDispAHabCorrecta() throws HabitacionYaExistenteException, HabitacionNoExistenteException {
+    public void anyadirDispAHabCorrecta() throws HabitacionYaExistenteException, HabitacionNoExistenteException, HabitacionConDispositivosException {
         //Given:Un conjunto de habitaciones ya existentes
         Habitacion hab1 = new Habitacion("hab1", "cocina");
         casa.addHabitacion(hab1);
@@ -44,7 +45,7 @@ public class HU03 {
     }
     @Test(expected = HabitacionNoExistenteException.class)
     //El usuario intenta borrar una habitación que no existe en el sistema.
-    public void anyadirDispAHabIncorrecta() throws HabitacionNoExistenteException {
+    public void anyadirDispAHabIncorrecta() throws HabitacionNoExistenteException, HabitacionConDispositivosException {
         //Given: Un conjunto de habitaciones ya existentes
         //When: Se intenta borrar una habitación que no existe
         casa.removeHabitacion("hab2");

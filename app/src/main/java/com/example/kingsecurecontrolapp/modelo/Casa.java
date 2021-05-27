@@ -1,9 +1,16 @@
 package com.example.kingsecurecontrolapp.modelo;
 
+import android.content.Context;
+
+import com.example.kingsecurecontrolapp.Controlador.CasaController;
+import com.example.kingsecurecontrolapp.Controlador.ControllerFactory;
 import com.example.kingsecurecontrolapp.exceptions.DispositivoConHabitacionExpception;
 import com.example.kingsecurecontrolapp.exceptions.DispositivoNoAsignadoException;
+import com.example.kingsecurecontrolapp.exceptions.HabitacionConDispositivosException;
 import com.example.kingsecurecontrolapp.exceptions.HabitacionNoExistenteException;
 import com.example.kingsecurecontrolapp.exceptions.HabitacionYaExistenteException;
+
+import org.json.JSONException;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -16,8 +23,10 @@ public class Casa {
     public Casa(String nombreCasa){
         this.nombreCasa = nombreCasa;
         this.habitaciones = new ArrayList<>();
-        this.sinAsignar = new Habitacion("sin_asignar","Sin asignar");
+        this.sinAsignar = new Habitacion("000","Sin habitacion");
     }
+
+
     public void pullData(){
         return;
     }
@@ -40,13 +49,18 @@ public class Casa {
                 throw new HabitacionYaExistenteException();
             }
         }
+        habitacion.setActuadores(new ArrayList<Actuador>());
+        habitacion.setSensores(new ArrayList<Sensor>());
         this.habitaciones.add(habitacion);
     }
 
-    public void removeHabitacion(String codHabitacion) throws HabitacionNoExistenteException {
+    public void removeHabitacion(String codHabitacion) throws HabitacionNoExistenteException, HabitacionConDispositivosException {
         boolean esta = false;
         for (Habitacion hab : habitaciones){
             if (hab.getCodigo().equals(codHabitacion)){
+                if(hab.getSensores().size() > 0 || hab.getActuadores().size() > 0){
+                    throw new HabitacionConDispositivosException();
+                }
                 esta = true;
                 habitaciones.remove(hab);
                 break;
@@ -223,7 +237,7 @@ public class Casa {
     public String getEstadoDispositivo(String codDispositivo, String codHabitacion){
         String estado = "";
         boolean encontrado = false;
-        if (codHabitacion.equals("sin_asignar")){
+        if (codHabitacion.equals("000")){
             for (Actuador actuador : sinAsignar.getActuadores()){
                 if (actuador.getCodigo().equals(codDispositivo)){
                     estado = actuador.getEstado().toString() + "#" +codHabitacion;

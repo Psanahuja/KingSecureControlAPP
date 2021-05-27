@@ -1,5 +1,6 @@
 package com.example.kingsecurecontrolapp;
 
+import android.app.DownloadManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.view.LayoutInflater;
@@ -12,20 +13,27 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.android.volley.RequestQueue;
+import com.example.kingsecurecontrolapp.Controlador.CasaController;
+import com.example.kingsecurecontrolapp.exceptions.HabitacionConDispositivosException;
 import com.example.kingsecurecontrolapp.exceptions.HabitacionNoExistenteException;
 import com.example.kingsecurecontrolapp.exceptions.HabitacionYaExistenteException;
 import com.example.kingsecurecontrolapp.modelo.Casa;
 import com.example.kingsecurecontrolapp.modelo.Habitacion;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
+import org.json.JSONException;
+
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
 public class HabitacionAdapter extends RecyclerView.Adapter<HabitacionAdapter.ViewHolder> {
 
     private ArrayList<Habitacion> localDataSet;
     private Casa casa;
     private Context context;
-
+    private RequestQueue requestQueue;
+    private CasaController casaController;
     /**
      * Provide a reference to the type of views that you are using
      * (custom ViewHolder).
@@ -35,6 +43,7 @@ public class HabitacionAdapter extends RecyclerView.Adapter<HabitacionAdapter.Vi
         private final ImageButton imgdelete;
         private final ImageButton imgedit;
         private final ImageButton imgadvance;
+
 
         public ViewHolder(View view) {
             super(view);
@@ -57,10 +66,23 @@ public class HabitacionAdapter extends RecyclerView.Adapter<HabitacionAdapter.Vi
      *
      * by RecyclerView.
      */
-    public HabitacionAdapter(Casa casa, Context context) {
+    public HabitacionAdapter(Casa casa, Context context, RequestQueue requestQueue, CasaController casaController) {
         this.casa = casa;
         localDataSet = casa.getHabitaciones();
         this.context = context;
+        this.requestQueue=requestQueue;
+        this.casaController = casaController;
+    }
+    public void dataSetChanged() throws InterruptedException {
+        notifyDataSetChanged();
+        requestQueue.add(casaController.getActuadoresHab(casa.getSinAsignar()));
+        requestQueue.add(casaController.getSensoresHab(casa.getSinAsignar()));
+        for (Habitacion hab : localDataSet){
+            requestQueue.add(casaController.getActuadoresHab(hab));
+            requestQueue.add(casaController.getSensoresHab(hab));
+
+
+        }
     }
 
     // Create new views (invoked by the layout manager)
@@ -106,10 +128,14 @@ public class HabitacionAdapter extends RecyclerView.Adapter<HabitacionAdapter.Vi
             public void onClick(DialogInterface dialog, int which) {
                 try {
                     casa.removeHabitacion(codHab);
+                    requestQueue.add(casaController.deleteHabitacion(codHab));
                     notifyItemRemoved(position);
                 } catch (HabitacionNoExistenteException e) {
                     habInex.setTitle("Esta habitacion no existe");
                     habInex.show();
+                }
+                catch (HabitacionConDispositivosException e){
+                    habInex.setTitle("Esta habitacion todavia tiene dispositivos asignados, no se puede borrar");
                 }
             }
         });
@@ -139,8 +165,9 @@ public class HabitacionAdapter extends RecyclerView.Adapter<HabitacionAdapter.Vi
                 String newNombre = inputNombre.getText().toString().trim();
                 try {
                     casa.cambiarNombreHabitacion(codHab, newNombre);
+                    requestQueue.add(casaController.editHabitacion(codHab, localDataSet.get(position).getNombre()));
                     notifyItemChanged(position);
-                } catch (HabitacionYaExistenteException e) {
+                } catch (HabitacionYaExistenteException | JSONException e) {
                     habYaExiste.setTitle("Ese nombre ya existe");
                     habYaExiste.show();
                 }
@@ -153,6 +180,10 @@ public class HabitacionAdapter extends RecyclerView.Adapter<HabitacionAdapter.Vi
             }
         });
         mADB.show();
+    }
+    public void setLocalDataSet(ArrayList<Habitacion> habs){
+        this.localDataSet = habs;
+        notifyDataSetChanged();
     }
     private int getPos(String codHab){
         for (Habitacion hab : localDataSet){

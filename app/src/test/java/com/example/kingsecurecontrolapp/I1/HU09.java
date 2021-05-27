@@ -50,10 +50,10 @@ public class HU09 {
     public void consultarEstadoDispositivoNoAsignado() {
         //Given: Un dispositivo no asignado
         //When: Se intenta comprobar su estado
-        String estadoDispositivo = casa.getEstadoDispositivo("sensor2", "sin_asignar");
+        String estadoDispositivo = casa.getEstadoDispositivo("sensor2", "000");
         //Then: Se muestra el estado del dispositvo(DISCONNECTED) y que aún no está asignado
         assertEquals(estadoDispositivo,"DISCONNECTED#" +
-                "sin_asignar");
+                "000");
     }
 }
 

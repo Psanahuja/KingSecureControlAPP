@@ -1,5 +1,6 @@
 package com.example.kingsecurecontrolapp.I1;
 
+import com.example.kingsecurecontrolapp.MainActivity;
 import com.example.kingsecurecontrolapp.exceptions.DispositivoConHabitacionExpception;
 import com.example.kingsecurecontrolapp.exceptions.HabitacionNoExistenteException;
 import com.example.kingsecurecontrolapp.exceptions.HabitacionYaExistenteException;
@@ -40,12 +41,14 @@ public class HU08{
     }
     @Test
     //El usuario abre la aplicación y modifica la información asignando a un dispositivo una habitación,el usuario cierra la aplicación y cuando se vuelve a abrir estas modificaciones que realizó anteriormente al cierre de la aplicación estarán guardadas.
-    public void anyadirDispAHabIncorrecta() {
+    public void anyadirDispAHabIncorrecta() throws HabitacionYaExistenteException {
         ///Given: La aplicación ya ha sido abierta y tiene cambios realizados
         casa = new Casa("MiCasa");
         hab1 = new Habitacion("hab1", "cocina");
+        casa.addHabitacion(hab1);
         //When: Se cierra la aplicación
         casa = new Casa("otraCasa");
+
         casa.pullData();
         //Then: Los cambios realizados están guardados para la siguiente vez que se abra la app
         assertTrue(casa.getHabitaciones().size()>0);

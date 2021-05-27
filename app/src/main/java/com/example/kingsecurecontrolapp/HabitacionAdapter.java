@@ -75,14 +75,6 @@ public class HabitacionAdapter extends RecyclerView.Adapter<HabitacionAdapter.Vi
     }
     public void dataSetChanged() throws InterruptedException {
         notifyDataSetChanged();
-        requestQueue.add(casaController.getActuadoresHab(casa.getSinAsignar()));
-        requestQueue.add(casaController.getSensoresHab(casa.getSinAsignar()));
-        for (Habitacion hab : localDataSet){
-            requestQueue.add(casaController.getActuadoresHab(hab));
-            requestQueue.add(casaController.getSensoresHab(hab));
-
-
-        }
     }
 
     // Create new views (invoked by the layout manager)
@@ -135,7 +127,8 @@ public class HabitacionAdapter extends RecyclerView.Adapter<HabitacionAdapter.Vi
                     habInex.show();
                 }
                 catch (HabitacionConDispositivosException e){
-                    habInex.setTitle("Esta habitacion todavia tiene dispositivos asignados, no se puede borrar");
+                    habInex.setTitle("Esta habitacion todavia tiene dispositivos asignados");
+                    habInex.show();
                 }
             }
         });

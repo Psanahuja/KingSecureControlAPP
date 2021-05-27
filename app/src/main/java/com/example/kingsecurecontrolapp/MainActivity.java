@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.View;
@@ -56,12 +57,14 @@ public class MainActivity extends AppCompatActivity {
 
         }
         habitacionAdapter = new HabitacionAdapter(casa, this, requestQueue, casaController);
-        JsonArrayRequest habsReq = casaController.loadHabitaciones(casa.getHabitaciones(), habitacionAdapter);
+        JsonArrayRequest habsReq = casaController.loadCasa(casa, casa.getHabitaciones(), habitacionAdapter);
 
         requestQueue.add(habsReq);
 
 
-
+        findViewById(R.id.btnSeeHab).setOnClickListener(v -> {
+            goToDispNoAsig();
+        });
 
         findViewById(R.id.addHabitacion).
                 setOnClickListener(v -> {
@@ -111,5 +114,10 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         mADB.show();
+    }
+    private void goToDispNoAsig(){
+        Intent intent = new Intent(this, DispositivosNoAsignados.class);
+
+        startActivity(intent);
     }
 }

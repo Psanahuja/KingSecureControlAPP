@@ -3,6 +3,10 @@ package com.example.kingsecurecontrolapp;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -11,6 +15,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -32,9 +37,12 @@ import com.google.android.material.snackbar.SnackbarContentLayout;
 
 import org.json.JSONException;
 
+import java.io.FileOutputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity  implements Serializable{
     private Casa casa = new Casa("Casa Pepe");
     private HabitacionController habitacionController = new HabitacionController();
     private HabitacionAdapter habitacionAdapter;
@@ -42,9 +50,14 @@ public class MainActivity extends AppCompatActivity {
     RequestQueue requestQueue;
     ControllerFactory controllerFactory;
     CasaController casaController;
+    NavController navController;
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
+        /*NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.fragment3);
+        System.out.println(getSupportFragmentManager().findFragmentById(R.id.fragment3));
+        navController = navHostFragment.getNavController();*/
         controllerFactory = new ControllerFactory();
         casaController = controllerFactory.newCasaController();
         requestQueue = Volley.newRequestQueue(getApplicationContext());
@@ -62,8 +75,11 @@ public class MainActivity extends AppCompatActivity {
         requestQueue.add(habsReq);
 
 
-        findViewById(R.id.btnSeeHab).setOnClickListener(v -> {
-            goToDispNoAsig();
+        findViewById(R.id.btnSeeHab).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                goToDispNoAsig(v);
+            }
         });
 
         findViewById(R.id.addHabitacion).
@@ -115,9 +131,21 @@ public class MainActivity extends AppCompatActivity {
         });
         mADB.show();
     }
-    private void goToDispNoAsig(){
+    private void goToDispNoAsig(View v){
         Intent intent = new Intent(this, DispositivosNoAsignados.class);
-
+        try{
+            //Creating the object
+            //Creating stream and writing the object
+            FileOutputStream fout=new FileOutputStream("casa");
+            ObjectOutputStream out=new ObjectOutputStream(fout);
+            out.writeObject(casa);
+            out.flush();
+            //closing the stream
+            out.close();
+            System.out.println("success");
+        }catch(Exception e){System.out.println(e);}
+        intent.putExtra("casa", casa);
         startActivity(intent);
+        //navController.navigate(R.id.action_mainActivity_to_dispositivosNoAsignados);
     }
 }

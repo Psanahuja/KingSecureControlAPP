@@ -9,5 +9,13 @@
         android:id="@+id/mainActivity"
         android:name="com.example.kingsecurecontrolapp.MainActivity"
         android:label="activity_main"
-        tools:layout="@layout/activity_main" />
+        tools:layout="@layout/activity_main" >
+        <action
+            android:id="@+id/action_mainActivity_to_dispositivosNoAsignados"
+            app:destination="@id/dispositivosNoAsignados" />
+    </activity>
+    <activity
+        android:id="@+id/dispositivosNoAsignados"
+        android:name="com.example.kingsecurecontrolapp.DispositivosNoAsignados"
+        android:label="DispositivosNoAsignados" />
 </navigation>

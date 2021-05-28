@@ -1,9 +1,10 @@
 package com.example.kingsecurecontrolapp.modelo;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 
-public class Habitacion {
+public class Habitacion implements Serializable {
 
     private String codigo;
     private String nombre;

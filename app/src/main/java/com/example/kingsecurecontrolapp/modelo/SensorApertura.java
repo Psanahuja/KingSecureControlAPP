@@ -1,6 +1,8 @@
 package com.example.kingsecurecontrolapp.modelo;
 
-public class SensorApertura extends Sensor{
+import java.io.Serializable;
+
+public class SensorApertura extends Sensor implements Serializable {
 
     private EstadoSApertura estado;
 

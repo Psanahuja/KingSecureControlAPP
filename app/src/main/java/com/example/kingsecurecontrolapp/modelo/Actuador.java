@@ -1,6 +1,8 @@
 package com.example.kingsecurecontrolapp.modelo;
 
-public class Actuador extends Dispositivo {
+import java.io.Serializable;
+
+public class Actuador extends Dispositivo implements Serializable {
 
     private EstadoActuador estado;
 

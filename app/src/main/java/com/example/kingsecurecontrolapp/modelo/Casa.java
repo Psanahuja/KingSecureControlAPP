@@ -12,10 +12,11 @@ import com.example.kingsecurecontrolapp.exceptions.HabitacionYaExistenteExceptio
 
 import org.json.JSONException;
 
+import java.io.Serializable;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 
-public class Casa {
+public class Casa implements Serializable {
     private String nombreCasa;
     private ArrayList<Habitacion> habitaciones;
     private final Habitacion sinAsignar;

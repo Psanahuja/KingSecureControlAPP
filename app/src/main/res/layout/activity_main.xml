@@ -83,14 +83,14 @@
         android:id="@+id/HabitacionesRecyclerView"
         android:scrollbars="vertical"
         android:fadeScrollbars="true"/>
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
+    <ImageButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/ic_baseline_add_24"
         android:id="@+id/addHabitacion"
         android:contentDescription="@string/a_ade_una_habitaci_n"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/HabitacionesTitulo"
+        app:layout_constraintStart_toEndOf="@id/HabitacionesTitulo"
         android:layout_margin="5dp"
         />
 

@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 public abstract class Sensor extends Dispositivo implements Serializable {
 
-    private final String tipoSensor;
+    private String tipoSensor;
 
     public Sensor(String codigo, String nombre, String tipoSensor) {
         super(codigo,nombre);
@@ -14,6 +14,7 @@ public abstract class Sensor extends Dispositivo implements Serializable {
     public String getTipoSensor(){
         return this.tipoSensor;
     }
+    public void setTipoSensor(String tipo){ this.tipoSensor = tipo; }
 
 
 }

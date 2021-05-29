@@ -74,6 +74,7 @@ public class CasaController extends Application {
                             SensorApertura sensorApertura = gson.fromJson(String.valueOf(sensApJson), SensorApertura.class);
                             String estado = sensApJson.getString("estado");
                             sensorApertura.setEstado(estadoAdapter.estadoSApertura(estado));
+                            sensorApertura.setTipoSensor("Apertura");
                             sensors.add(sensorApertura);
                         }
                         for (int i=0; i<senMovJson.length(); i++){
@@ -81,6 +82,7 @@ public class CasaController extends Application {
                             SensorMovimiento sensorMovimiento = gson.fromJson(String.valueOf(senmovJson), SensorMovimiento.class);
                             String estado = senmovJson.getString("estado");
                             sensorMovimiento.setEstado(estadoAdapter.estadoSMovimiento(estado));
+                            sensorMovimiento.setTipoSensor("Movimiento");
                             sensors.add(sensorMovimiento);
                         }
                         if (!hab.getCodigo().equals("000")) {

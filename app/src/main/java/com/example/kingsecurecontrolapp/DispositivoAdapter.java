@@ -18,9 +18,13 @@ import com.example.kingsecurecontrolapp.Controlador.CasaController;
 import com.example.kingsecurecontrolapp.exceptions.HabitacionConDispositivosException;
 import com.example.kingsecurecontrolapp.exceptions.HabitacionNoExistenteException;
 import com.example.kingsecurecontrolapp.exceptions.HabitacionYaExistenteException;
+import com.example.kingsecurecontrolapp.modelo.Actuador;
 import com.example.kingsecurecontrolapp.modelo.Casa;
 import com.example.kingsecurecontrolapp.modelo.Dispositivo;
 import com.example.kingsecurecontrolapp.modelo.Habitacion;
+import com.example.kingsecurecontrolapp.modelo.Sensor;
+import com.example.kingsecurecontrolapp.modelo.SensorApertura;
+import com.example.kingsecurecontrolapp.modelo.SensorMovimiento;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import org.json.JSONException;
@@ -40,6 +44,7 @@ public class DispositivoAdapter extends RecyclerView.Adapter<DispositivoAdapter.
      */
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private final TextView textView;
+        private final TextView estado;
 
 
 
@@ -48,11 +53,13 @@ public class DispositivoAdapter extends RecyclerView.Adapter<DispositivoAdapter.
             // Define click listener for the ViewHolder's View
 
             textView = (TextView) view.findViewById(R.id.dspTlt);
+            estado = (TextView) view.findViewById(R.id.estado);
         }
 
         public TextView getTextView() {
             return textView;
         }
+        public TextView getEstado() { return estado; }
     }
 
     /**
@@ -87,7 +94,10 @@ public class DispositivoAdapter extends RecyclerView.Adapter<DispositivoAdapter.
 
     @Override
     public void onBindViewHolder(DispositivoAdapter.ViewHolder holder, int position) {
-        holder.textView.setText(localDataSet.get(position).getNombre());
+        Dispositivo dispositivo = localDataSet.get(position);
+        holder.textView.setText(dispositivo.getNombre());
+        String est = casa.getEstadoDispositivo(dispositivo.getCodigo(), habitacion.getCodigo());
+        holder.estado.setText(est);
     }
 
     // Replace the contents of a view (invoked by the layout manager)

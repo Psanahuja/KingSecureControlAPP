@@ -21,4 +21,20 @@
         app:layout_constraintStart_toEndOf="@+id/dispImg"
         android:text="Titulo dispositivo"
         android:textSize="20sp"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tltestado"
+        app:layout_constraintStart_toStartOf="@id/dspTlt"
+        app:layout_constraintTop_toBottomOf="@id/dspTlt"
+        android:text="Estado:"
+        android:textSize="15sp"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/estado"
+        app:layout_constraintStart_toEndOf="@id/tltestado"
+        app:layout_constraintTop_toBottomOf="@id/dspTlt"
+        android:text="Estado"
+        android:textSize="15sp"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

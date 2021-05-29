@@ -3,6 +3,7 @@ package com.example.kingsecurecontrolapp;
 import android.app.DownloadManager;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -107,6 +108,10 @@ public class HabitacionAdapter extends RecyclerView.Adapter<HabitacionAdapter.Vi
             int pos = getPos(viewHolder.textView.getText().toString());
             editHabitacion(localDataSet.get(pos).getCodigo(), pos);
         });
+        viewHolder.imgadvance.setOnClickListener(v -> {
+            int pos = getPos(viewHolder.textView.getText().toString());
+            advanceHabitacion(localDataSet.get(pos));
+        });
     }
     public void addHabitacion(Habitacion habitacion){
         notifyItemInserted(localDataSet.size() - 1);
@@ -141,6 +146,12 @@ public class HabitacionAdapter extends RecyclerView.Adapter<HabitacionAdapter.Vi
         mADB.show();
 
 
+    }
+    public void advanceHabitacion(Habitacion habitacion){
+        Intent intent = new Intent(this.context, DispositivosHabitacion.class);
+        intent.putExtra("casa", casa);
+        intent.putExtra("habitacion", habitacion);
+        this.context.startActivity(intent);
     }
     public void editHabitacion(String codHab, int position){
         MaterialAlertDialogBuilder mADB = new MaterialAlertDialogBuilder(context);

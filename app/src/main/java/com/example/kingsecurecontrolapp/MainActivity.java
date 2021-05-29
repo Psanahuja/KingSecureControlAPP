@@ -133,17 +133,6 @@ public class MainActivity extends AppCompatActivity  implements Serializable{
     }
     private void goToDispNoAsig(View v){
         Intent intent = new Intent(this, DispositivosNoAsignados.class);
-        try{
-            //Creating the object
-            //Creating stream and writing the object
-            FileOutputStream fout=new FileOutputStream("casa");
-            ObjectOutputStream out=new ObjectOutputStream(fout);
-            out.writeObject(casa);
-            out.flush();
-            //closing the stream
-            out.close();
-            System.out.println("success");
-        }catch(Exception e){System.out.println(e);}
         intent.putExtra("casa", casa);
         startActivity(intent);
         //navController.navigate(R.id.action_mainActivity_to_dispositivosNoAsignados);

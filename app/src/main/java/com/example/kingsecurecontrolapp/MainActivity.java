@@ -11,14 +11,17 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Parcelable;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.RequestQueue;
@@ -41,6 +44,8 @@ import java.io.FileOutputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class MainActivity extends AppCompatActivity  implements Serializable{
     private Casa casa = new Casa("Casa Pepe");
@@ -50,7 +55,8 @@ public class MainActivity extends AppCompatActivity  implements Serializable{
     RequestQueue requestQueue;
     ControllerFactory controllerFactory;
     CasaController casaController;
-    NavController navController;
+    TimerTask timerTask;
+    final Handler handler = new Handler();
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -61,6 +67,9 @@ public class MainActivity extends AppCompatActivity  implements Serializable{
         controllerFactory = new ControllerFactory();
         casaController = controllerFactory.newCasaController();
         requestQueue = Volley.newRequestQueue(getApplicationContext());
+        Timer timer = new Timer();
+        initializeTimerTask();
+        timer.schedule(timerTask, 10000, 10000);
 
         //casa.setHabitaciones(habitacionController.loadHabitaciones(habitacionController.getJsonHabitaciones()));
         setContentView(R.layout.activity_main);
@@ -135,5 +144,23 @@ public class MainActivity extends AppCompatActivity  implements Serializable{
         intent.putExtra("casa", casa);
         startActivity(intent);
         //navController.navigate(R.id.action_mainActivity_to_dispositivosNoAsignados);
+    }
+
+    public void initializeTimerTask() {
+
+        timerTask = new TimerTask() {
+            public void run() {
+
+                //use a handler to run a toast that shows the current timestamp
+                handler.post(new Runnable() {
+                    public void run() {
+                        //get the current timeStamp
+                        JsonArrayRequest habAddReq = casaController.alertaasa(casa, casa.getHabitaciones(), habitacionAdapter, getApplicationContext());
+                        requestQueue.add(habAddReq);
+                        //show the toast
+                    }
+                });
+            }
+        };
     }
 }

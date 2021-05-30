@@ -14,11 +14,13 @@ import com.android.volley.toolbox.Volley;
 import com.example.kingsecurecontrolapp.HabitacionAdapter;
 import com.example.kingsecurecontrolapp.modelo.Actuador;
 import com.example.kingsecurecontrolapp.modelo.Casa;
+import com.example.kingsecurecontrolapp.modelo.EstadoActuador;
 import com.example.kingsecurecontrolapp.modelo.EstadoSMovimiento;
 import com.example.kingsecurecontrolapp.modelo.Habitacion;
 import com.example.kingsecurecontrolapp.modelo.Sensor;
 import com.example.kingsecurecontrolapp.modelo.SensorApertura;
 import com.example.kingsecurecontrolapp.modelo.SensorMovimiento;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
@@ -321,5 +323,78 @@ public class CasaController extends Application {
             }
         });
         return jsonObjectRequest;
+    }
+    public JsonArrayRequest alertaasa(Casa casa,ArrayList<Habitacion> habitacions, HabitacionAdapter habitacionAdapter, Context context){
+        EstadoAdapter estadoAdapter = new EstadoAdapter();
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, "https://kingserve.herokuapp.com/casa", null, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+                String desconectado = "0";
+                String alarma = "2";
+                try {
+                    Gson gson = new Gson();
+                    for (int j = 0; j < response.length(); j++) {
+                        JSONObject habitacion = response.getJSONObject(j);
+                        JSONObject habJson = habitacion.getJSONObject("habitacion");
+                        Habitacion hab =gson.fromJson(String.valueOf(habJson), Habitacion.class);
+                        JSONArray actJson = habitacion.getJSONArray("actuadores");
+                        JSONArray senApJson = habitacion.getJSONArray("sensores_apertura");
+                        JSONArray senMovJson = habitacion.getJSONArray("sensores_movimiento");
+                        ArrayList<Actuador> actuadors = new ArrayList<>();
+                        ArrayList<Sensor> sensors = new ArrayList<>();
+                        for (int i = 0; i<actJson.length(); i++){
+                            JSONObject actuadorJson = actJson.getJSONObject(i);
+                            Actuador actuador = gson.fromJson(String.valueOf(actuadorJson), Actuador.class);
+                            String estado = actuadorJson.getString("estado");
+                            actuador.setEstado(estadoAdapter.estadoActuador(estado));
+                            actuadors.add(actuador);
+                            if (!hab.getCodigo().equals("000")){
+                                if (estado.equals(alarma)){
+                                    MaterialAlertDialogBuilder materialAlertDialogBuilder = new MaterialAlertDialogBuilder(context);
+                                    String msg = "Alarma producida";
+                                    materialAlertDialogBuilder.setTitle(msg);
+                                }
+                            }
+                        }
+                        for (int i=0; i<senApJson.length(); i++){
+                            JSONObject sensApJson = senApJson.getJSONObject(i);
+                            SensorApertura sensorApertura = gson.fromJson(String.valueOf(sensApJson), SensorApertura.class);
+                            String estado = sensApJson.getString("estado");
+                            sensorApertura.setEstado(estadoAdapter.estadoSApertura(estado));
+                            sensorApertura.setTipoSensor("Apertura");
+                            sensors.add(sensorApertura);
+                        }
+                        for (int i=0; i<senMovJson.length(); i++){
+                            JSONObject senmovJson = senMovJson.getJSONObject(i);
+                            SensorMovimiento sensorMovimiento = gson.fromJson(String.valueOf(senmovJson), SensorMovimiento.class);
+                            String estado = senmovJson.getString("estado");
+                            sensorMovimiento.setEstado(estadoAdapter.estadoSMovimiento(estado));
+                            sensorMovimiento.setTipoSensor("Movimiento");
+                            sensors.add(sensorMovimiento);
+                        }
+                        if (!hab.getCodigo().equals("000")) {
+                            hab.setActuadores(actuadors);
+                            hab.setSensores(sensors);
+                            habitacions.add(hab);
+                        }
+                        else {
+                            casa.getSinAsignar().setSensores(sensors);
+                            casa.getSinAsignar().setActuadores(actuadors);
+                        }
+                    }
+
+                    habitacionAdapter.dataSetChanged();
+                } catch (JSONException | InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        error.printStackTrace();
+                    }
+                });
+        return jsonArrayRequest;
     }
 }

@@ -259,4 +259,36 @@ public class CasaController extends Application {
                 });
         return jsonObjectRequest;
     }
+
+    public JsonObjectRequest addActuadorToHabitacion(String codHab, String codAct){
+        String url = "https://kingserve.herokuapp.com/habitacion/addActuador/" + codHab + "/" + codAct;
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+            }
+        });
+        return jsonObjectRequest;
+    }
+
+    public JsonObjectRequest addSensorToHabitacion(String codHab, String codSen){
+        String url = "https://kingserve.herokuapp.com/habitacion/addSensor/" + codHab + "/" + codSen;
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+            }
+        });
+        return jsonObjectRequest;
+    }
 }

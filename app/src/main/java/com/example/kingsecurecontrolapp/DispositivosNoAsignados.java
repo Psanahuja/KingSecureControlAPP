@@ -1,5 +1,6 @@
 package com.example.kingsecurecontrolapp;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -33,6 +34,12 @@ public class DispositivosNoAsignados extends AppCompatActivity {
         recyclerView.setAdapter(dispositivoAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
     }
 
 }

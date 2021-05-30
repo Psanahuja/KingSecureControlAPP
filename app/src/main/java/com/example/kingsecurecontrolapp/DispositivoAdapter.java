@@ -9,13 +9,17 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.kingsecurecontrolapp.Controlador.CasaController;
+import com.example.kingsecurecontrolapp.exceptions.DispositivoConHabitacionExpception;
 import com.example.kingsecurecontrolapp.exceptions.HabitacionConDispositivosException;
 import com.example.kingsecurecontrolapp.exceptions.HabitacionNoExistenteException;
 import com.example.kingsecurecontrolapp.exceptions.HabitacionYaExistenteException;
@@ -118,40 +122,82 @@ public class DispositivoAdapter extends RecyclerView.Adapter<DispositivoAdapter.
         return 0;
     }
     public void menu(int pos, String codDisp){
-        MaterialAlertDialogBuilder materialAlertDialogBuilder = new MaterialAlertDialogBuilder(context);
+        MaterialAlertDialogBuilder madB = new MaterialAlertDialogBuilder(context);
+        AlertDialog materialAlertDialogBuilder = madB.create();
         materialAlertDialogBuilder.setTitle("Opciones");
         if (habitacion.getCodigo().equals("000")){
             Button button =  new Button(context);
             button.setText("Anyadir a una habitacion");
             button.setOnClickListener(v -> {
                 anyadirAHabitacion(pos, codDisp);
+                materialAlertDialogBuilder.cancel();
             });
             LinearLayout linearLayout = new LinearLayout(context);
             linearLayout.addView(button);
             linearLayout.setOrientation(LinearLayout.VERTICAL);
             materialAlertDialogBuilder.setView(linearLayout);
+            materialAlertDialogBuilder.setCancelable(true);
             materialAlertDialogBuilder.show();
         }
         else {
             Button button =  new Button(context);
             button.setText("Cambiar de una habitacion");
             button.setOnClickListener(v -> {
+                materialAlertDialogBuilder.cancel();
             });
             Button btnrm = new Button(context);
             btnrm.setText("Desasociar dispositivo");
             btnrm.setOnClickListener(v -> {
-
+                materialAlertDialogBuilder.cancel();
             });
             LinearLayout linearLayout = new LinearLayout(context);
             linearLayout.addView(button);
             linearLayout.addView(btnrm);
             linearLayout.setOrientation(LinearLayout.VERTICAL);
             materialAlertDialogBuilder.setView(linearLayout);
+            materialAlertDialogBuilder.setCancelable(true);
             materialAlertDialogBuilder.show();
         }
     }
     public void anyadirAHabitacion(int pos, String codDisp){
+        MaterialAlertDialogBuilder mAterialDB = new MaterialAlertDialogBuilder(context);
+        AlertDialog mADB = mAterialDB.create();
+        mADB.setTitle("Escoje una habitacion");
+        LinearLayout linearLayout = new LinearLayout(context);
+        linearLayout.setOrientation(LinearLayout.VERTICAL);
+        mADB.setView(linearLayout);
+        mADB.setCancelable(true);
+        for (Habitacion hab : casa.getHabitaciones()){
+            Button btnHab = new Button(context);
+            btnHab.setText(hab.getNombre());
+            btnHab.setOnClickListener(v ->{
+                try {
+                    Dispositivo dispositivo = localDataSet.get(pos);
+                    casa.addDispositivoAHabitacion(hab.getCodigo(), codDisp);
+                    JsonObjectRequest jsonObjectRequest;
+                    if (dispositivo.getClass().equals(Actuador.class)){
+                        jsonObjectRequest = casaController.addActuadorToHabitacion(hab.getCodigo(), codDisp);
+                    }
+                    else {
+                        jsonObjectRequest = casaController.addSensorToHabitacion(hab.getCodigo(), codDisp);
+                    }
+                    requestQueue.add(jsonObjectRequest);
+                    notifyItemRemoved(pos);
+                    localDataSet.clear();
+                    localDataSet.addAll(habitacion.getActuadores());
+                    localDataSet.addAll(habitacion.getSensores());
+                    mADB.cancel();
 
+                } catch (DispositivoConHabitacionExpception dispositivoConHabitacionExpception) {
+                    dispositivoConHabitacionExpception.printStackTrace();
+                } catch (HabitacionNoExistenteException e) {
+                    e.printStackTrace();
+                }
+            });
+            linearLayout.addView(btnHab);
+        }
+
+        mADB.show();
     }
     // Replace the contents of a view (invoked by the layout manager)
 

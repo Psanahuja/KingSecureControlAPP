@@ -329,6 +329,7 @@ public class CasaController extends Application {
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, "https://kingserve.herokuapp.com/casa", null, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
+                ArrayList<Habitacion> habitacionArrayList = new ArrayList<>();
                 String desconectado = "0";
                 String alarma = "2";
                 try {
@@ -375,14 +376,16 @@ public class CasaController extends Application {
                         if (!hab.getCodigo().equals("000")) {
                             hab.setActuadores(actuadors);
                             hab.setSensores(sensors);
-                            habitacions.add(hab);
+                            habitacionArrayList.add(hab);
                         }
+
                         else {
                             casa.getSinAsignar().setSensores(sensors);
                             casa.getSinAsignar().setActuadores(actuadors);
                         }
                     }
-
+                    habitacions.clear();
+                    habitacions.addAll(habitacionArrayList);
                     habitacionAdapter.dataSetChanged();
                 } catch (JSONException | InterruptedException e) {
                     e.printStackTrace();

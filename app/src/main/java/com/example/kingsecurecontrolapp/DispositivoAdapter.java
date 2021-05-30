@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -45,6 +46,8 @@ public class DispositivoAdapter extends RecyclerView.Adapter<DispositivoAdapter.
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private final TextView textView;
         private final TextView estado;
+        private final ImageButton imageButton;
+        private String codDisp;
 
 
 
@@ -54,12 +57,14 @@ public class DispositivoAdapter extends RecyclerView.Adapter<DispositivoAdapter.
 
             textView = (TextView) view.findViewById(R.id.dspTlt);
             estado = (TextView) view.findViewById(R.id.estado);
+            imageButton = (ImageButton) view.findViewById(R.id.opciones);
         }
 
         public TextView getTextView() {
             return textView;
         }
         public TextView getEstado() { return estado; }
+        public ImageButton getImageButton() { return imageButton; }
     }
 
     /**
@@ -95,11 +100,59 @@ public class DispositivoAdapter extends RecyclerView.Adapter<DispositivoAdapter.
     @Override
     public void onBindViewHolder(DispositivoAdapter.ViewHolder holder, int position) {
         Dispositivo dispositivo = localDataSet.get(position);
+        holder.codDisp = dispositivo.getCodigo();
         holder.textView.setText(dispositivo.getNombre());
         String est = casa.getEstadoDispositivo(dispositivo.getCodigo(), habitacion.getCodigo());
         holder.estado.setText(est);
+        int pos = getPos(holder.codDisp);
+        holder.imageButton.setOnClickListener(v -> {
+            menu(pos, holder.codDisp);
+        });
     }
+    public int getPos(String codDisp){
+        for (Dispositivo dispositivo : localDataSet){
+            if (dispositivo.getCodigo().equals(codDisp)){
+                return localDataSet.indexOf(dispositivo);
+            }
+        }
+        return 0;
+    }
+    public void menu(int pos, String codDisp){
+        MaterialAlertDialogBuilder materialAlertDialogBuilder = new MaterialAlertDialogBuilder(context);
+        materialAlertDialogBuilder.setTitle("Opciones");
+        if (habitacion.getCodigo().equals("000")){
+            Button button =  new Button(context);
+            button.setText("Anyadir a una habitacion");
+            button.setOnClickListener(v -> {
+                anyadirAHabitacion(pos, codDisp);
+            });
+            LinearLayout linearLayout = new LinearLayout(context);
+            linearLayout.addView(button);
+            linearLayout.setOrientation(LinearLayout.VERTICAL);
+            materialAlertDialogBuilder.setView(linearLayout);
+            materialAlertDialogBuilder.show();
+        }
+        else {
+            Button button =  new Button(context);
+            button.setText("Cambiar de una habitacion");
+            button.setOnClickListener(v -> {
+            });
+            Button btnrm = new Button(context);
+            btnrm.setText("Desasociar dispositivo");
+            btnrm.setOnClickListener(v -> {
 
+            });
+            LinearLayout linearLayout = new LinearLayout(context);
+            linearLayout.addView(button);
+            linearLayout.addView(btnrm);
+            linearLayout.setOrientation(LinearLayout.VERTICAL);
+            materialAlertDialogBuilder.setView(linearLayout);
+            materialAlertDialogBuilder.show();
+        }
+    }
+    public void anyadirAHabitacion(int pos, String codDisp){
+
+    }
     // Replace the contents of a view (invoked by the layout manager)
 
     // Return the size of your dataset (invoked by the layout manager)

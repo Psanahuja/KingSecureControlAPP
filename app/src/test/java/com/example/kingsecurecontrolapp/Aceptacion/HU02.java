@@ -1,11 +1,8 @@
-package com.example.kingsecurecontrolapp.I1;
+package com.example.kingsecurecontrolapp.Aceptacion;
 
-import com.example.kingsecurecontrolapp.exceptions.DispositivoConHabitacionExpception;
-import com.example.kingsecurecontrolapp.exceptions.HabitacionNoExistenteException;
 import com.example.kingsecurecontrolapp.exceptions.HabitacionYaExistenteException;
 import com.example.kingsecurecontrolapp.modelo.Casa;
 import com.example.kingsecurecontrolapp.modelo.Habitacion;
-import com.example.kingsecurecontrolapp.modelo.SensorApertura;
 
 import org.junit.Before;
 import org.junit.Test;

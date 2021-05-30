@@ -1,4 +1,4 @@
-package com.example.kingsecurecontrolapp.I1;
+package com.example.kingsecurecontrolapp.Aceptacion;
 
 import com.example.kingsecurecontrolapp.exceptions.DispositivoConHabitacionExpception;
 import com.example.kingsecurecontrolapp.exceptions.DispositivoNoAsignadoException;

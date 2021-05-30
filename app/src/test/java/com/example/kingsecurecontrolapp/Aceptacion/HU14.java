@@ -1,7 +1,5 @@
-package com.example.kingsecurecontrolapp.I1;
+package com.example.kingsecurecontrolapp.Aceptacion;
 
-import com.example.kingsecurecontrolapp.exceptions.DispositivoConHabitacionExpception;
-import com.example.kingsecurecontrolapp.exceptions.HabitacionNoExistenteException;
 import com.example.kingsecurecontrolapp.exceptions.HabitacionYaExistenteException;
 import com.example.kingsecurecontrolapp.modelo.Actuador;
 import com.example.kingsecurecontrolapp.modelo.Casa;

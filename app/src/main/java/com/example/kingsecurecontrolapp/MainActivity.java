@@ -71,7 +71,6 @@ public class MainActivity extends AppCompatActivity  implements Serializable{
         }
         habitacionAdapter = new HabitacionAdapter(casa, this, requestQueue, casaController);
         JsonArrayRequest habsReq = casaController.loadCasa(casa, casa.getHabitaciones(), habitacionAdapter);
-
         requestQueue.add(habsReq);
 
 

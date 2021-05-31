@@ -248,7 +248,7 @@ public class DispositivoAdapter extends RecyclerView.Adapter<DispositivoAdapter.
     public void cambiarHabDisp(int pos, String codDisp){
         MaterialAlertDialogBuilder mAterialDB = new MaterialAlertDialogBuilder(context);
         AlertDialog mADB = mAterialDB.create();
-        mADB.setTitle("Escoje una habitacion");
+        mADB.setTitle("Escoge una habitacion");
         LinearLayout linearLayout = new LinearLayout(context);
         linearLayout.setOrientation(LinearLayout.VERTICAL);
         mADB.setView(linearLayout);

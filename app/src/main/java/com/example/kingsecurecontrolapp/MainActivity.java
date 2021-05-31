@@ -3,6 +3,7 @@ package com.example.kingsecurecontrolapp;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationCompat;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -11,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
+import android.app.Notification;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -43,6 +45,7 @@ import org.json.JSONException;
 import java.io.FileOutputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.nio.channels.Channel;
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -68,7 +71,7 @@ public class MainActivity extends AppCompatActivity  implements Serializable{
         casaController = controllerFactory.newCasaController();
         requestQueue = Volley.newRequestQueue(getApplicationContext());
         Timer timer = new Timer();
-        initializeTimerTask();
+        initializeTimerTask(this);
         timer.schedule(timerTask, 10000, 10000);
 
         //casa.setHabitaciones(habitacionController.loadHabitaciones(habitacionController.getJsonHabitaciones()));
@@ -146,7 +149,7 @@ public class MainActivity extends AppCompatActivity  implements Serializable{
         //navController.navigate(R.id.action_mainActivity_to_dispositivosNoAsignados);
     }
 
-    public void initializeTimerTask() {
+    public void initializeTimerTask(Context context) {
 
         timerTask = new TimerTask() {
             public void run() {
@@ -156,11 +159,19 @@ public class MainActivity extends AppCompatActivity  implements Serializable{
                     public void run() {
                         //get the current timeStamp
                         JsonArrayRequest habAddReq = casaController.alertaasa(casa, casa.getHabitaciones(), habitacionAdapter, getApplicationContext());
-                        requestQueue.add(habAddReq);
+                        synchronized (this) {
+                            requestQueue.add(habAddReq);
+                        }
                         //show the toast
+                        if (casa.getAlarma()!=null) {
+                            Intent intent = new Intent(context, Alerta.class);
+                            startActivity(intent);
+
+                        }
                     }
                 });
             }
         };
     }
+
 }

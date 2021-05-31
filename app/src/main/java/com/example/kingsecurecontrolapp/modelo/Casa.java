@@ -20,6 +20,7 @@ public class Casa implements Serializable {
     private String nombreCasa;
     private ArrayList<Habitacion> habitaciones;
     private final Habitacion sinAsignar;
+    private Actuador alarma;
 
     public Casa(String nombreCasa){
         this.nombreCasa = nombreCasa;
@@ -31,6 +32,15 @@ public class Casa implements Serializable {
     public void pullData(){
         return;
     }
+
+    public void setAlarma(Actuador alarma) {
+        this.alarma = alarma;
+    }
+
+    public Actuador getAlarma() {
+        return alarma;
+    }
+
     public String getNombreCasa() {
         return nombreCasa;
     }

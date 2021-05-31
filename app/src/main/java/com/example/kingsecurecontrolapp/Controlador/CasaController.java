@@ -4,8 +4,6 @@ import android.app.Application;
 import android.content.Context;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -40,7 +38,7 @@ import java.util.ArrayList;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class CasaController extends AppCompatActivity {
+public class CasaController extends Application {
     Retrofit retrofit;
     public CasaController(){
         retrofit = new Retrofit.Builder()
@@ -353,9 +351,7 @@ public class CasaController extends AppCompatActivity {
                             actuadors.add(actuador);
                             if (!hab.getCodigo().equals("000")){
                                 if (estado.equals(alarma)){
-                                    MaterialAlertDialogBuilder materialAlertDialogBuilder = new MaterialAlertDialogBuilder(context);
-                                    String msg = "Alarma producida";
-                                    materialAlertDialogBuilder.setTitle(msg);
+                                    casa.setAlarma(actuador);
                                 }
                             }
                         }

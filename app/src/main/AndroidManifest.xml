@@ -14,6 +14,7 @@
         android:usesCleartextTraffic="true">
         <activity android:name=".DispositivosNoAsignados"></activity>
         <activity android:name=".DispositivosHabitacion"></activity>
+        <activity android:name=".Alerta"></activity>
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

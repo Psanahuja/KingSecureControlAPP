@@ -128,7 +128,7 @@ public class DispositivoAdapter extends RecyclerView.Adapter<DispositivoAdapter.
         materialAlertDialogBuilder.setTitle("Opciones");
         if (habitacion.getCodigo().equals("000")){
             Button button =  new Button(context);
-            button.setText("Anyadir a una habitacion");
+            button.setText("Añadir a una habitacion");
             button.setOnClickListener(v -> {
                 anyadirAHabitacion(pos, codDisp);
                 materialAlertDialogBuilder.cancel();
@@ -165,7 +165,7 @@ public class DispositivoAdapter extends RecyclerView.Adapter<DispositivoAdapter.
     public void anyadirAHabitacion(int pos, String codDisp){
         MaterialAlertDialogBuilder mAterialDB = new MaterialAlertDialogBuilder(context);
         AlertDialog mADB = mAterialDB.create();
-        mADB.setTitle("Escoje una habitacion");
+        mADB.setTitle("Escoge una habitacion");
         LinearLayout linearLayout = new LinearLayout(context);
         linearLayout.setOrientation(LinearLayout.VERTICAL);
         mADB.setView(linearLayout);

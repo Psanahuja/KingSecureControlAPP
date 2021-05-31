@@ -1,6 +1,8 @@
 package com.example.kingsecurecontrolapp.modelo;
 
-public abstract class Dispositivo {
+import java.io.Serializable;
+
+public abstract class Dispositivo implements Serializable {
 
     private String codigo;
     private String nombre;

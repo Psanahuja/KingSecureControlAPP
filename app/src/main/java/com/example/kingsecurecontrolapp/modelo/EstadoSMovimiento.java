@@ -1,6 +1,8 @@
 package com.example.kingsecurecontrolapp.modelo;
 
-public enum EstadoSMovimiento {
+import java.io.Serializable;
+
+public enum EstadoSMovimiento implements Serializable {
     NO_MOTION,
     MOTION_DETECTED,
     DISCONNECTED

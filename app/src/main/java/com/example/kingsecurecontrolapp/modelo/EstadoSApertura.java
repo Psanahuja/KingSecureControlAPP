@@ -1,6 +1,8 @@
 package com.example.kingsecurecontrolapp.modelo;
 
-public enum EstadoSApertura {
+import java.io.Serializable;
+
+public enum EstadoSApertura implements Serializable {
     OPEN,
     CLOSE,
     DISCONNECTED

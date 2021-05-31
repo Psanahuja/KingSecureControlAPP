@@ -1,11 +1,14 @@
 package com.example.kingsecurecontrolapp.modelo;
 
-public class Actuador extends Dispositivo {
+import java.io.Serializable;
+
+public class Actuador extends Dispositivo implements Serializable {
 
     private EstadoActuador estado;
 
     public Actuador(String codigo, String nombre) {
         super(codigo, nombre);
+        this.estado = EstadoActuador.DISCONNECTED;
     }
 
     public EstadoActuador getEstado() {

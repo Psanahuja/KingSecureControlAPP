@@ -2,4 +2,5 @@
     <string name="app_name">KingSecureControlAPP</string>
     <string name="dispositivos_disponibles">Dispositivos disponibles:</string>
     <string name="habitaciones">Habitaciones</string>
+    <string name="a_ade_una_habitaci_n">Añade una habitación</string>
 </resources>

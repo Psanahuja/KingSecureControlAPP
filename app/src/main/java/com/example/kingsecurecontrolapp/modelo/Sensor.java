@@ -1,8 +1,10 @@
 package com.example.kingsecurecontrolapp.modelo;
 
-public abstract class Sensor extends Dispositivo {
+import java.io.Serializable;
 
-    private final String tipoSensor;
+public abstract class Sensor extends Dispositivo implements Serializable {
+
+    private String tipoSensor;
 
     public Sensor(String codigo, String nombre, String tipoSensor) {
         super(codigo,nombre);
@@ -12,6 +14,7 @@ public abstract class Sensor extends Dispositivo {
     public String getTipoSensor(){
         return this.tipoSensor;
     }
+    public void setTipoSensor(String tipo){ this.tipoSensor = tipo; }
 
 
 }

@@ -1,9 +1,10 @@
 package com.example.kingsecurecontrolapp.modelo;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 
-public class Habitacion {
+public class Habitacion implements Serializable {
 
     private String codigo;
     private String nombre;
@@ -42,6 +43,17 @@ public class Habitacion {
     }
 
     public void addSensor(Sensor sensor) {
+
+        if (this.codigo.equals("sin_asignar")){
+            if (sensor.getTipoSensor().equals("Apertura")){
+                SensorApertura sensorApertura = (SensorApertura) sensor;
+                sensorApertura.setEstado(EstadoSApertura.DISCONNECTED);
+            }
+            else {
+                SensorMovimiento sensorMovimiento = (SensorMovimiento) sensor;
+                sensorMovimiento.setEstado(EstadoSMovimiento.DISCONNECTED);
+            }
+        }
         this.sensores.add(sensor);
     }
 
@@ -61,6 +73,9 @@ public class Habitacion {
     public void setActuadores(ArrayList<Actuador> actuadores){this.actuadores = actuadores;}
 
     public void addActuador(Actuador actuador) {
+        if (this.codigo.equals("sin_asignar")){
+            actuador.setEstado(EstadoActuador.DISCONNECTED);
+        }
         this.actuadores.add(actuador);
     }
 

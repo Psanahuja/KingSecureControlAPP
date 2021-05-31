@@ -2,13 +2,13 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="150dp"
+    android:layout_margin="20dp"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="150dp"
-        android:layout_margin="20dp"
         android:padding="10dp"
         android:id="@+id/cardHabitaciones"
         app:strokeColor="@color/black"
@@ -48,30 +48,27 @@
                 android:src="@drawable/ic_baseline_delete_24"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/divisorLineHab"
-                tools:src="@drawable/ic_baseline_delete_24" />
+                app:layout_constraintTop_toBottomOf="@id/divisorLineHab"/>
             <androidx.appcompat.widget.AppCompatImageButton
                 android:id="@+id/btnEditHab"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_margin="12dp"
-                android:src="@drawable/ic_baseline_delete_24"
+                android:src="@drawable/ic_baseline_create_24"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/divisorLineHab"
                 app:layout_constraintEnd_toEndOf="parent"
-                tools:src="@drawable/ic_baseline_create_24"
                 />
             <androidx.appcompat.widget.AppCompatImageButton
                 android:id="@+id/btnSeeHab"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_margin="12dp"
-                android:src="@drawable/ic_baseline_delete_24"
+                android:src="@drawable/ic_baseline_navigate_next_24"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/divisorLineHab"
                 app:layout_constraintEnd_toEndOf="parent"
-                tools:src="@drawable/ic_baseline_navigate_next_24"
                 />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.google.android.material.card.MaterialCardView>

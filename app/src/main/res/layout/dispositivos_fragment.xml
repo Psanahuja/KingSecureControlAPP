@@ -4,31 +4,12 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
-    <TextView
-        android:id="@+id/Dispositivos"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:padding="10dp"
-        android:text="@string/dispositivos_disponibles"
-        android:textColor="@color/black"
-        android:textSize="20sp"
-        android:visibility="visible"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        />
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@android:color/black"
-        app:layout_constraintTop_toBottomOf="@+id/Dispositivos"
-        android:id="@+id/divisor2"
-        />
+
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/divisor2"
+        android:id="@+id/recylcerViewDispNoAsig"
+        app:layout_constraintTop_toTopOf="parent"
         android:layout_margin="8dp"
         tools:listitem="@layout/item_dispositivo"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
